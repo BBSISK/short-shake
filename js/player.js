@@ -16,8 +16,16 @@
     if(btn) btn.hidden=true;
   }
   vids.forEach(function(v){
-    v.addEventListener('play',function(){solo(v);});
-    v.addEventListener('ended',both);
+    var w=document.createElement('div'); w.className='vwrap';
+    v.parentNode.insertBefore(w,v); w.appendChild(v);
+    var b=document.createElement('button'); b.type='button'; b.className='bigplay'; b.setAttribute('aria-label','Play');
+    b.innerHTML='<span></span>'; w.appendChild(b);
+    function sync(){ b.hidden=!(v.paused&&(v.currentTime===0||v.ended)); }
+    b.addEventListener('click',function(){v.play();});
+    v.addEventListener('play',function(){solo(v);sync();});
+    v.addEventListener('pause',sync);
+    v.addEventListener('ended',function(){both();sync();});
+    sync();
   });
   if(btn) btn.querySelector('button').addEventListener('click',function(){vids.forEach(function(v){v.pause();});both();});
 })();
