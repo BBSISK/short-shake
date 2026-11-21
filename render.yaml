@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: short-shake
+    runtime: static
+    plan: free
+    staticPublishPath: .
